@@ -1,9 +1,0 @@
-1:"$Sreact.fragment"
-2:I[47257,["/women_wellness_selfcare/_next/static/chunks/074x7-80rr6d6.js","/women_wellness_selfcare/_next/static/chunks/2i_nh0x_lu9-s.js","/women_wellness_selfcare/_next/static/chunks/031d4hdncmqdj.js","/women_wellness_selfcare/_next/static/chunks/0vkg21y_jms2b.js"],"ClientPageRoot"]
-3:I[31713,["/women_wellness_selfcare/_next/static/chunks/074x7-80rr6d6.js","/women_wellness_selfcare/_next/static/chunks/2i_nh0x_lu9-s.js","/women_wellness_selfcare/_next/static/chunks/031d4hdncmqdj.js","/women_wellness_selfcare/_next/static/chunks/0vkg21y_jms2b.js","/women_wellness_selfcare/_next/static/chunks/3_-6nd0py9r0s.js","/women_wellness_selfcare/_next/static/chunks/3mal4qdrktyrq.js"],"default"]
-6:I[97367,["/women_wellness_selfcare/_next/static/chunks/074x7-80rr6d6.js","/women_wellness_selfcare/_next/static/chunks/2i_nh0x_lu9-s.js","/women_wellness_selfcare/_next/static/chunks/031d4hdncmqdj.js","/women_wellness_selfcare/_next/static/chunks/0vkg21y_jms2b.js"],"OutletBoundary"]
-7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/women_wellness_selfcare/_next/static/chunks/3_-6nd0py9r0s.js","async":true}],["$","script","script-1",{"src":"/women_wellness_selfcare/_next/static/chunks/3mal4qdrktyrq.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"Yg1LqtbvJwZ6bg8XgO6IL"}
-4:{}
-5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
-8:null

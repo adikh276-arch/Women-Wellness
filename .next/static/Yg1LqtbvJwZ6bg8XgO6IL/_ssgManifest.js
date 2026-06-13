@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fmodule\u002F[slug]","\u002Fmodule\u002F[slug]\u002F[kind]\u002Fread\u002F[index]","\u002Fmodule\u002F[slug]\u002F[resource]","\u002Fmodule\u002F[slug]\u002Funderstanding\u002F[index]","\u002Ftips\u002F[slug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
