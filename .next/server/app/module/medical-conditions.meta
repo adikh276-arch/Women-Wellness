@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/module/layout,_N_T_/module/[slug]/layout,_N_T_/module/[slug]/page,_N_T_/module/medical-conditions"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/module/$d$slug/__PAGE__",
+    "/module/$d$slug",
+    "/module",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,3 +1,4 @@
+"use client";
 import {
   Flower, Flower2, ClipboardPlus, Salad, Baby, Brain, Sprout, HeartPulse,
   Wind, UtensilsCrossed, Scale, BookOpen, CircleDot, Heart, Lightbulb,

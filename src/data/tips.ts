@@ -1,3 +1,4 @@
+"use client";
 import { tipPagesData } from "@/modules/tips/data";
 
 export type TipSlug = "hair-skin" | "food" | "weight-loss" | "pms";

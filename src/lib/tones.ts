@@ -1,3 +1,4 @@
+"use client";
 import type { PastelTone } from "@/data/modules";
 
 // Static class maps so Tailwind's JIT picks them up.

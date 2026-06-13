@@ -1,3 +1,4 @@
+"use client";
 import { pcosData } from "@/modules/pcos/data";
 import { reproductiveHealthData } from "@/modules/reproductive-health/data";
 import { medicalConditionsData } from "@/modules/medical-conditions/data";

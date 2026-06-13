@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[43859,["/women_wellness_selfcare/_next/static/chunks/074x7-80rr6d6.js","/women_wellness_selfcare/_next/static/chunks/2i_nh0x_lu9-s.js","/women_wellness_selfcare/_next/static/chunks/031d4hdncmqdj.js","/women_wellness_selfcare/_next/static/chunks/0vkg21y_jms2b.js","/women_wellness_selfcare/_next/static/chunks/3k7soe2oyvndc.js","/women_wellness_selfcare/_next/static/chunks/3mal4qdrktyrq.js"],"default"]
+3:I[97367,["/women_wellness_selfcare/_next/static/chunks/074x7-80rr6d6.js","/women_wellness_selfcare/_next/static/chunks/2i_nh0x_lu9-s.js","/women_wellness_selfcare/_next/static/chunks/031d4hdncmqdj.js","/women_wellness_selfcare/_next/static/chunks/0vkg21y_jms2b.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{}],[["$","script","script-0",{"src":"/women_wellness_selfcare/_next/static/chunks/3k7soe2oyvndc.js","async":true}],["$","script","script-1",{"src":"/women_wellness_selfcare/_next/static/chunks/3mal4qdrktyrq.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"Yg1LqtbvJwZ6bg8XgO6IL"}
+5:null

@@ -1,0 +1,10 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/module/[slug]/[kind]/read/[index]/page": "app/module/[slug]/[kind]/read/[index]/page.js",
+  "/module/[slug]/[resource]/page": "app/module/[slug]/[resource]/page.js",
+  "/module/[slug]/page": "app/module/[slug]/page.js",
+  "/module/[slug]/understanding/[index]/page": "app/module/[slug]/understanding/[index]/page.js",
+  "/page": "app/page.js",
+  "/tips/[slug]/page": "app/tips/[slug]/page.js"
+}

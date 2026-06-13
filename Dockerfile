@@ -21,10 +21,10 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 # Copy built files to the subfolder only to keep paths clean
-COPY --from=builder /app/dist /usr/share/nginx/html/women_wellness_selfcare
+COPY --from=builder /app/out /usr/share/nginx/html/women_wellness_selfcare
 
 # Copy the custom nginx config
-COPY vite-nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY next-nginx.conf /etc/nginx/conf.d/nginx.conf
 
 EXPOSE 80
 

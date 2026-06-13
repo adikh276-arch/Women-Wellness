@@ -1,3 +1,4 @@
+"use client";
 import { t } from "@/lib/i18n-utils";
 import { type ModuleContent } from "@/data/modules";
 

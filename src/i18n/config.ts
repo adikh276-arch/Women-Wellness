@@ -1,3 +1,4 @@
+"use client";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -27,7 +28,12 @@ const detector = new LanguageDetector();
 detector.addDetector(urlParamDetector);
 
 // Dynamically import all i18n JSON files from modules
-const locales = import.meta.glob("../modules/*/i18n/*.json", { eager: true });
+// @ts-ignore
+const localesContext = require.context("../modules", true, /\/i18n\/.*\.json$/);
+const locales: any = {};
+localesContext.keys().forEach((key: string) => {
+  locales[key] = localesContext(key);
+});
 const resources: any = {};
 const namespaces: string[] = [];
 
