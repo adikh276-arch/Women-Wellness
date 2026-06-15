@@ -16,6 +16,7 @@ const supportedLanguages = [
 const urlParamDetector = {
   name: 'urlParam',
   lookup(options: any) {
+    if (typeof window === 'undefined') return null;
     const params = new URLSearchParams(window.location.search);
     return params.get('lang');
   },
@@ -27,26 +28,7 @@ const urlParamDetector = {
 const detector = new LanguageDetector();
 detector.addDetector(urlParamDetector);
 
-// Dynamically import all i18n JSON files from modules
-// @ts-ignore
-const localesContext = require.context("../modules", true, /\/i18n\/.*\.json$/);
-const locales: any = {};
-localesContext.keys().forEach((key: string) => {
-  locales[key] = localesContext(key);
-});
-const resources: any = {};
-const namespaces: string[] = [];
-
-Object.keys(locales).forEach((path) => {
-  const parts = path.split("/");
-  const ns = parts[parts.length - 3];
-  const lng = parts[parts.length - 1].replace(".json", "");
-
-  if (!resources[lng]) resources[lng] = {};
-  resources[lng][ns] = (locales[path] as any).default || locales[path];
-  
-  if (!namespaces.includes(ns)) namespaces.push(ns);
-});
+import { resources, namespaces } from "./resources";
 
 i18n
   .use(detector)
