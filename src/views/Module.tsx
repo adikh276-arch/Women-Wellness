@@ -28,7 +28,7 @@ const resourceStyles = [
 const Module = () => {
   const { slug } = useParams<{ slug: ModuleSlug }>();
   const navigate = useNavigate();
-  const { t } = useTranslation([slug as string, 'core']); // Namespace for the module and core for general UI
+  const { t, i18n } = useTranslation([slug as string, 'core']); // Namespace for the module and core for general UI
   
   const data = slug ? modules[slug as ModuleSlug] : undefined;
   if (!data) return <Navigate to="/" replace />;
@@ -94,10 +94,22 @@ const Module = () => {
               const meta = trackerStyles[tName];
               const tone = meta.tone as keyof typeof toneBg;
               const Icon = meta.Icon;
+              
+              let finalHref = meta.href;
+              try {
+                const url = new URL(meta.href);
+                if (i18n.language) {
+                  url.searchParams.set("lang", i18n.language);
+                }
+                finalHref = url.toString();
+              } catch (e) {
+                // fallback if URL is invalid
+              }
+
               return (
                 <a
                   key={tName}
-                  href={meta.href}
+                  href={finalHref}
                   className={`group flex items-center justify-between rounded-2xl border border-border/60 ${toneBg[tone]}/50 px-4 py-3 text-left shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card`}
                 >
                   <div className="flex items-center gap-3">
