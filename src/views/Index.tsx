@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@/lib/router";
 import { ChevronLeft, MessageCircle } from "lucide-react";
 import { iconMap } from "@/lib/icons";
 import { supportCards, tipCards } from "@/data/modules";
+import { exitApp } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/config";
@@ -17,7 +18,7 @@ const Index = () => {
         <header className="mb-12 flex items-center justify-between animate-in slide-up">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => navigate(-1)}
+              onClick={exitApp}
               aria-label={t("common.back")}
               className="mt-1 grid h-9 w-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary"
             >
