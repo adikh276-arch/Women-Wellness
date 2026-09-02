@@ -8,17 +8,17 @@ import { toneBg, toneFg } from "@/lib/tones";
 type Kind = "articles" | "stories";
 
 const ArticleStory = () => {
-  const { slug, kind, index } = useParams<{ slug: ModuleSlug; kind: Kind; index: string }>();
+  const { slug, resource, index } = useParams<{ slug: ModuleSlug; resource: Kind; index: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation([slug || "core", "core"]);
   const data = slug ? modules[slug as ModuleSlug] : undefined;
   const i = Number(index);
-  if (!data || (kind !== "articles" && kind !== "stories") || isNaN(i))
+  if (!data || (resource !== "articles" && resource !== "stories") || isNaN(i))
     return <Navigate to="/" replace />;
 
-  const isArticle = kind === "articles";
+  const isArticle = resource === "articles";
   const item = isArticle ? data.articles[i] : data.stories[i];
-  if (!item) return <Navigate to={`/module/${slug}/${kind}`} replace />;
+  if (!item) return <Navigate to={`/module/${slug}/${resource}`} replace />;
 
   const tone = (isArticle ? "yellow" : "lilac") as keyof typeof toneBg;
   const accent = `hsl(var(--pastel-${tone}-fg))`;
@@ -55,7 +55,7 @@ const ArticleStory = () => {
           <button
             onClick={() => {
               if (window.history.length > 1) navigate(-1);
-              else navigate(`/module/${slug}/${kind}`);
+              else navigate(`/module/${slug}/${resource}`);
             }}
             className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground/60 transition-colors hover:text-foreground"
           >
@@ -154,7 +154,7 @@ const ArticleStory = () => {
 
           <div className="space-y-8">
             {Array.from({ length: bodyLength }).map((_, idx) => {
-              const p = t(`${kind}.${i}.body.${idx}`);
+              const p = t(`${resource}.${i}.body.${idx}`);
               if (idx === 0 && !quote) {
                 return (
                   <p
@@ -202,7 +202,7 @@ const ArticleStory = () => {
         <footer className="mt-16 space-y-8">
           {nextIdx !== i && (
             <Link
-              to={`/module/${slug}/${kind}/read/${nextIdx}`}
+              to={`/module/${slug}/${resource}/read/${nextIdx}`}
               className="group block rounded-2xl border border-border/60 bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-soft md:p-8"
             >
               <p
@@ -232,12 +232,12 @@ const ArticleStory = () => {
             <button
               onClick={() => {
                 if (window.history.length > 1) navigate(-1);
-                else navigate(`/module/${slug}/${kind}`);
+                else navigate(`/module/${slug}/${resource}`);
               }}
               className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-6 py-3 text-sm font-semibold text-foreground shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
             >
               <ChevronLeft className="h-4 w-4" />
-              {t("core:common.back_to")} {t(`core:resources.${kind}`)}
+              {t("core:common.back_to")} {t(`core:resources.${resource}`)}
             </button>
           </div>
 
