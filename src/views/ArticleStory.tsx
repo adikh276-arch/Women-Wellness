@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { modules, type ModuleSlug } from "@/data/modules";
 import { toneBg, toneFg } from "@/lib/tones";
 
-type Kind = "articles" | "stories";
+type Kind = "articles" | "stories" | "working-mothers-articles";
 
 const ArticleStory = () => {
   const { slug, resource, index } = useParams<{ slug: ModuleSlug; resource: Kind; index: string }>();
@@ -13,39 +13,50 @@ const ArticleStory = () => {
   const { t } = useTranslation([slug || "core", "core"]);
   const data = slug ? modules[slug as ModuleSlug] : undefined;
   const i = Number(index);
-  if (!data || (resource !== "articles" && resource !== "stories") || isNaN(i))
+  if (!data || (resource !== "articles" && resource !== "stories" && resource !== "working-mothers-articles") || isNaN(i))
     return <Navigate to="/" replace />;
 
-  const isArticle = resource === "articles";
-  const item = isArticle ? data.articles[i] : data.stories[i];
+  const isWorkingMothers = resource === "working-mothers-articles";
+  const isArticle = resource === "articles" || isWorkingMothers;
+  const list = isWorkingMothers
+    ? (data.workingMothersArticles || [])
+    : isArticle
+    ? data.articles
+    : data.stories;
+  const item = list[i];
   if (!item) return <Navigate to={`/module/${slug}/${resource}`} replace />;
 
-  const tone = (isArticle ? "yellow" : "lilac") as keyof typeof toneBg;
+  const tone = (isWorkingMothers ? "rose" : isArticle ? "yellow" : "lilac") as keyof typeof toneBg;
   const accent = `hsl(var(--pastel-${tone}-fg))`;
   const accentSoft = `hsl(var(--pastel-${tone}))`;
   
-  const headingKey = isArticle ? `articles.${i}.title` : `stories.${i}.name`;
-  const heading = t(headingKey);
-  const eyebrowKey = isArticle ? "core:resources.articles" : "core:resources.stories";
+  const keyPrefix = isWorkingMothers ? "working_mothers_articles" : resource;
+  const fullHeading = (item as any).fullTitle || item.title || (item as any).name;
+  const headingKey = isArticle ? `${keyPrefix}.${i}.full_title` : `stories.${i}.name`;
+  const heading = t(headingKey, t(`${keyPrefix}.${i}.title`, fullHeading));
+  const eyebrowKey = isWorkingMothers
+    ? "core:resources.working_mothers_articles"
+    : isArticle
+    ? "core:resources.articles"
+    : "core:resources.stories";
   const eyebrow = t(eyebrowKey);
   
-  const summary = isArticle ? t(`articles.${i}.summary`) : undefined;
-  const quote = !isArticle ? t(`stories.${i}.quote`) : undefined;
+  const summary = isArticle ? t(`${keyPrefix}.${i}.summary`, (item as any).summary) : undefined;
+  const quote = !isArticle ? t(`stories.${i}.quote`, (item as any).quote) : undefined;
 
-  const bodyLength = isArticle ? data.articles[i].body.length : data.stories[i].body.length;
+  const bodyLength = item.body.length;
 
-  const words = isArticle 
-    ? data.articles[i].body.join(" ").split(/\s+/).filter(Boolean).length 
-    : data.stories[i].body.join(" ").split(/\s+/).filter(Boolean).length;
+  const words = item.body.join(" ").split(/\s+/).filter(Boolean).length;
   
   const mins = Math.max(2, Math.round(words / 220));
   const issueNo = String(i + 1).padStart(2, "0");
 
   // Next item for end-of-article CTA
-  const list = isArticle ? data.articles : data.stories;
   const nextIdx = (i + 1) % list.length;
-  const nextTitleKey = isArticle ? `articles.${nextIdx}.title` : `stories.${nextIdx}.name`;
-  const nextTitle = t(nextTitleKey);
+  const nextItem = list[nextIdx];
+  const nextFullHeading = nextItem ? ((nextItem as any).fullTitle || nextItem.title || (nextItem as any).name) : "";
+  const nextTitleKey = isArticle ? `${keyPrefix}.${nextIdx}.full_title` : `stories.${nextIdx}.name`;
+  const nextTitle = t(nextTitleKey, t(`${keyPrefix}.${nextIdx}.title`, nextFullHeading));
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,7 +165,7 @@ const ArticleStory = () => {
 
           <div className="space-y-8">
             {Array.from({ length: bodyLength }).map((_, idx) => {
-              const p = t(`${resource}.${i}.body.${idx}`);
+              const p = t(`${keyPrefix}.${i}.body.${idx}`, item.body[idx]);
               if (idx === 0 && !quote) {
                 return (
                   <p

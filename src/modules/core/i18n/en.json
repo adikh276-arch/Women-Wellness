@@ -47,18 +47,21 @@
   },
   "resource_taglines": {
     "articles": "Long-form reads, written with care and reviewed by experts.",
+    "working_mothers_articles": "Guidance, career balance, and well-being for mothers navigating work and family.",
     "tips": "Small, practical shifts you can fold into your day.",
     "stories": "Honest reflections from people who've walked this path.",
     "myths": "Common misconceptions, gently corrected with evidence."
   },
   "resource_eyebrows": {
     "articles": "The Library",
+    "working_mothers_articles": "Working Mothers",
     "tips": "Daily Practice",
     "stories": "In Their Words",
     "myths": "Setting It Straight"
   },
   "resources": {
     "articles": "Articles",
+    "working_mothers_articles": "Articles for Working Mothers",
     "tips": "Tips",
     "stories": "Stories",
     "myths": "Myths"

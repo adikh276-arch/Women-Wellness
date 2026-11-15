@@ -14,11 +14,12 @@ import {
   Check,
   Clock,
   BookOpen,
+  Briefcase,
 } from "lucide-react";
 import { modules, type ModuleSlug } from "@/data/modules";
 import { toneBg, toneFg } from "@/lib/tones";
 
-type ResourceKey = "articles" | "tips" | "stories" | "myths";
+type ResourceKey = "articles" | "tips" | "stories" | "myths" | "working-mothers-articles";
 
 const Resource = () => {
   const { slug, resource } = useParams<{ slug: ModuleSlug; resource: ResourceKey }>();
@@ -36,6 +37,13 @@ const Resource = () => {
       Icon: Newspaper,
       tagline: t("core:resource_taglines.articles"),
       eyebrow: t("core:resource_eyebrows.articles"),
+    },
+    "working-mothers-articles": {
+      title: t("core:resources.working_mothers_articles"),
+      tone: "rose",
+      Icon: Briefcase,
+      tagline: t("core:resource_taglines.working_mothers_articles"),
+      eyebrow: t("core:resource_eyebrows.working_mothers_articles"),
     },
     tips: {
       title: t("core:resources.tips"),
@@ -121,162 +129,176 @@ const Resource = () => {
       </header>
 
       <div className="mx-auto max-w-5xl px-6 py-14 md:px-10 md:py-20 animate-in slide-up stagger-1">
-        {/* ---------- ARTICLES ---------- */}
-        {resource === "articles" && (
-          <div>
-            {/* Section meta strip */}
-            <div className="mb-8 flex items-baseline justify-between border-b border-border/60 pb-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-foreground/50">
-                {String(data.articles.length).padStart(2, "0")} {t("core:resources.articles")}
-              </p>
-              <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/40">
-                {t("core:common.curated_for")} {t("title")}
-              </p>
-            </div>
+        {/* ---------- ARTICLES & WORKING MOTHERS ARTICLES ---------- */}
+        {(resource === "articles" || resource === "working-mothers-articles") && (() => {
+          const isWorkingMothers = resource === "working-mothers-articles";
+          const articlesList = isWorkingMothers ? (data.workingMothersArticles || []) : data.articles;
+          const keyPrefix = isWorkingMothers ? "working_mothers_articles" : "articles";
+          const sectionTitle = isWorkingMothers ? t("core:resources.working_mothers_articles") : t("core:resources.articles");
 
-            {data.articles.map((a, i) => {
-              const words = (a.body?.join(" ") ?? a.summary ?? "").split(/\s+/).length;
-              const mins = Math.max(2, Math.round(words / 220));
-              const isFeature = i === 0;
+          return (
+            <div>
+              {/* Section meta strip */}
+              <div className="mb-8 flex items-baseline justify-between border-b border-border/60 pb-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-foreground/50">
+                  {String(articlesList.length).padStart(2, "0")} {sectionTitle}
+                </p>
+                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/40">
+                  {t("core:common.curated_for")} {t("title")}
+                </p>
+              </div>
 
-              if (isFeature) {
-                return (
-                  <Link
-                    key={a.title}
-                    to={`/module/${slug}/articles/read/${i}`}
-                    className="group relative mb-12 block overflow-hidden rounded-[28px] border border-border/50 bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-card"
-                  >
-                    <div className="grid md:grid-cols-[1.4fr_1fr]">
-                      {/* Left: editorial copy */}
-                      <div className="relative p-8 md:p-12">
-                        <div className="mb-5 flex flex-wrap items-center gap-3">
+              {articlesList.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-border/70 p-12 text-center text-muted-foreground">
+                  <Briefcase className="mx-auto mb-3 h-8 w-8 opacity-40" />
+                  <p className="text-base font-medium">{t("core:common.no_articles_yet", "Articles coming soon")}</p>
+                </div>
+              ) : (
+                articlesList.map((a, i) => {
+                  const words = (a.body?.join(" ") ?? a.summary ?? "").split(/\s+/).length;
+                  const mins = Math.max(2, Math.round(words / 220));
+                  const isFeature = i === 0;
+
+                  if (isFeature) {
+                    return (
+                      <Link
+                        key={a.title}
+                        to={`/module/${slug}/${resource}/read/${i}`}
+                        className="group relative mb-12 block overflow-hidden rounded-[28px] border border-border/50 bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-card"
+                      >
+                        <div className="grid md:grid-cols-[1.4fr_1fr]">
+                          {/* Left: editorial copy */}
+                          <div className="relative p-8 md:p-12">
+                            <div className="mb-5 flex flex-wrap items-center gap-3">
+                              <span
+                                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em]"
+                                style={{ background: `${accent}1a`, color: accent }}
+                              >
+                                <Sparkles className="h-3 w-3" fill="currentColor" />
+                                {t("core:common.featured_read")}
+                              </span>
+                              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-foreground/60">
+                                <Clock className="h-3.5 w-3.5" />
+                                {mins} {t("core:common.min_read")}
+                              </span>
+                            </div>
+                            <h2 className="text-3xl font-bold leading-[1.1] tracking-tight text-foreground md:text-[42px]">
+                              {t(`${keyPrefix}.${i}.title`, a.title)}
+                            </h2>
+                            <p className="mt-4 text-[15px] leading-[1.7] text-foreground/70 md:text-base">
+                              {t(`${keyPrefix}.${i}.summary`, a.summary)}
+                            </p>
+                            <div
+                              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold transition-transform group-hover:translate-x-1"
+                              style={{ color: accent }}
+                            >
+                              {t("core:common.read_article")}
+                              <ArrowUpRight className="h-4 w-4" />
+                            </div>
+                          </div>
+
+                          {/* Right: tinted visual panel */}
+                          <div className={`relative hidden overflow-hidden ${toneBg[tone]} md:block`}>
+                            <div
+                              className="absolute -right-12 -top-12 h-56 w-56 rounded-full opacity-60 blur-3xl"
+                              style={{ background: accent }}
+                            />
+                            <div
+                              className="absolute -bottom-16 -left-10 h-48 w-48 rounded-full opacity-30 blur-3xl"
+                              style={{ background: accent }}
+                            />
+                            <div className="relative flex h-full flex-col justify-between p-10">
+                              <div className="flex justify-end">
+                                <div
+                                  className="grid h-14 w-14 place-items-center rounded-2xl bg-card shadow-soft"
+                                  style={{ color: accent }}
+                                >
+                                  <Icon className="h-7 w-7" strokeWidth={1.5} />
+                                </div>
+                              </div>
+                              <div>
+                                <p
+                                  className="font-mono text-[10px] font-bold uppercase tracking-[0.28em]"
+                                  style={{ color: accent }}
+                                >
+                                  {t("core:common.issue_no")} 01
+                                </p>
+                                <p className="mt-2 font-mono text-6xl font-light leading-none tabular-nums text-foreground/85">
+                                  01
+                                </p>
+                                <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.2em] text-foreground/50">
+                                  {t("title")} {t("core:common.library")}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={a.title}
+                      to={`/module/${slug}/${resource}/read/${i}`}
+                      className="group relative mb-4 grid grid-cols-[64px_1fr_auto] items-start gap-6 overflow-hidden rounded-2xl border border-border/50 bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card md:gap-10 md:p-7"
+                    >
+                      {/* Soft tinted accent bar */}
+                      <span
+                        aria-hidden
+                        className={`absolute inset-y-0 left-0 w-1.5 ${toneBg[tone]}`}
+                      />
+                      {/* Subtle corner glow */}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
+                        style={{ background: accent }}
+                      />
+
+                      {/* Number column */}
+                      <span
+                        className="relative font-mono text-2xl font-light tabular-nums leading-none md:text-3xl"
+                        style={{ color: accent }}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+
+                      {/* Content */}
+                      <div className="relative min-w-0">
+                        <div className="mb-2 flex flex-wrap items-center gap-3">
                           <span
-                            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em]"
+                            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em]"
                             style={{ background: `${accent}1a`, color: accent }}
                           >
-                            <Sparkles className="h-3 w-3" fill="currentColor" />
-                            {t("core:common.featured_read")}
+                            {t("core:common.article")}
                           </span>
-                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-foreground/60">
-                            <Clock className="h-3.5 w-3.5" />
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-foreground/55">
+                            <Clock className="h-3 w-3" />
                             {mins} {t("core:common.min_read")}
                           </span>
                         </div>
-                        <h2 className="text-3xl font-bold leading-[1.1] tracking-tight text-foreground md:text-[42px]">
-                          {t(`articles.${i}.title`)}
+                        <h2 className="text-xl font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-foreground/70 md:text-[26px]">
+                          {t(`${keyPrefix}.${i}.title`, a.title)}
                         </h2>
-                        <p className="mt-4 text-[15px] leading-[1.7] text-foreground/70 md:text-base">
-                          {t(`articles.${i}.summary`)}
+                        <p className="mt-2.5 line-clamp-2 max-w-2xl text-[14.5px] leading-[1.65] text-foreground/65">
+                          {t(`${keyPrefix}.${i}.summary`, a.summary)}
                         </p>
-                        <div
-                          className="mt-7 inline-flex items-center gap-2 text-sm font-semibold transition-transform group-hover:translate-x-1"
-                          style={{ color: accent }}
-                        >
-                          {t("core:common.read_article")}
-                          <ArrowUpRight className="h-4 w-4" />
-                        </div>
                       </div>
 
-                      {/* Right: tinted visual panel */}
-                      <div className={`relative hidden overflow-hidden ${toneBg[tone]} md:block`}>
-                        <div
-                          className="absolute -right-12 -top-12 h-56 w-56 rounded-full opacity-60 blur-3xl"
-                          style={{ background: accent }}
-                        />
-                        <div
-                          className="absolute -bottom-16 -left-10 h-48 w-48 rounded-full opacity-30 blur-3xl"
-                          style={{ background: accent }}
-                        />
-                        <div className="relative flex h-full flex-col justify-between p-10">
-                          <div className="flex justify-end">
-                            <div
-                              className="grid h-14 w-14 place-items-center rounded-2xl bg-card shadow-soft"
-                              style={{ color: accent }}
-                            >
-                              <Newspaper className="h-7 w-7" strokeWidth={1.5} />
-                            </div>
-                          </div>
-                          <div>
-                            <p
-                              className="font-mono text-[10px] font-bold uppercase tracking-[0.28em]"
-                              style={{ color: accent }}
-                            >
-                              {t("core:common.issue_no")} 01
-                            </p>
-                            <p className="mt-2 font-mono text-6xl font-light leading-none tabular-nums text-foreground/85">
-                              01
-                            </p>
-                            <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.2em] text-foreground/50">
-                              {t("title")} {t("core:common.library")}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-
-              return (
-                <Link
-                  key={a.title}
-                  to={`/module/${slug}/articles/read/${i}`}
-                  className="group relative mb-4 grid grid-cols-[64px_1fr_auto] items-start gap-6 overflow-hidden rounded-2xl border border-border/50 bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card md:gap-10 md:p-7"
-                >
-                  {/* Soft tinted accent bar */}
-                  <span
-                    aria-hidden
-                    className={`absolute inset-y-0 left-0 w-1.5 ${toneBg[tone]}`}
-                  />
-                  {/* Subtle corner glow */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
-                    style={{ background: accent }}
-                  />
-
-                  {/* Number column */}
-                  <span
-                    className="relative font-mono text-2xl font-light tabular-nums leading-none md:text-3xl"
-                    style={{ color: accent }}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
-                  {/* Content */}
-                  <div className="relative min-w-0">
-                    <div className="mb-2 flex flex-wrap items-center gap-3">
-                      <span
-                        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em]"
-                        style={{ background: `${accent}1a`, color: accent }}
+                      {/* Arrow affordance */}
+                      <div
+                        className="relative mt-1 grid h-10 w-10 place-items-center rounded-full border border-border/60 transition-all group-hover:translate-x-1"
+                        style={{ color: accent }}
                       >
-                        {t("core:common.article")}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-foreground/55">
-                        <Clock className="h-3 w-3" />
-                        {mins} {t("core:common.min_read")}
-                      </span>
-                    </div>
-                    <h2 className="text-xl font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-foreground/70 md:text-[26px]">
-                      {t(`articles.${i}.title`)}
-                    </h2>
-                    <p className="mt-2.5 line-clamp-2 max-w-2xl text-[14.5px] leading-[1.65] text-foreground/65">
-                      {t(`articles.${i}.summary`)}
-                    </p>
-                  </div>
-
-                  {/* Arrow affordance */}
-                  <div
-                    className="relative mt-1 grid h-10 w-10 place-items-center rounded-full border border-border/60 transition-all group-hover:translate-x-1"
-                    style={{ color: accent }}
-                  >
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                      </div>
+                    </Link>
+                  );
+                })
+              )}
+            </div>
+          );
+        })()}
 
         {/* ---------- TIPS ---------- */}
         {resource === "tips" && (

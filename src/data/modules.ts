@@ -23,6 +23,7 @@ export type PastelTone =
 
 export interface Article {
   title: string;
+  fullTitle?: string;
   summary: string;
   body: string[];
 }
@@ -41,6 +42,7 @@ export interface ModuleContent {
   tone: PastelTone;
   understanding: { label: string; tone: "peach" | "blue" | "rose" | "mint"; body: string[] }[];
   articles: Article[];
+  workingMothersArticles?: Article[];
   tips: string[];
   stories: Story[];
   myths: { myth: string; fact: string }[];

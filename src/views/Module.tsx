@@ -1,6 +1,6 @@
 "use client";
 import { useParams, Link, Navigate, useNavigate } from "@/lib/router";
-import { ChevronLeft, ChevronRight, BookOpen, CircleDot, Heart, Lightbulb, Star, Moon, HeartHandshake, Bike, Smile, Newspaper, BookMarked, HelpCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen, CircleDot, Heart, Lightbulb, Star, Moon, HeartHandshake, Bike, Smile, Newspaper, BookMarked, HelpCircle, Briefcase } from "lucide-react";
 import { modules, type ModuleSlug, TRACKERS } from "@/data/modules";
 import { iconMap } from "@/lib/icons";
 import { toneBg, toneFg, understandingTile } from "@/lib/tones";
@@ -129,7 +129,15 @@ const Module = () => {
         <section className="mb-12 animate-in slide-up stagger-3">
           <h2 className="mb-5 text-2xl font-bold tracking-tight">{t('core:sections.resources')}</h2>
           <div className="space-y-3">
-            {resourceStyles.map((r) => {
+            {[
+              { key: "Articles", path: "articles", tone: "yellow" as const, Icon: Newspaper, labelKey: "core:resources.articles" },
+              ...(slug === "pregnancy-postpartum" || data.workingMothersArticles ? [
+                { key: "WorkingMothersArticles", path: "working-mothers-articles", tone: "rose" as const, Icon: Briefcase, labelKey: "core:resources.working_mothers_articles" }
+              ] : []),
+              { key: "Tips", path: "tips", tone: "blue" as const, Icon: Lightbulb, labelKey: "core:resources.tips" },
+              { key: "Stories", path: "stories", tone: "lilac" as const, Icon: BookMarked, labelKey: "core:resources.stories" },
+              { key: "Myths", path: "myths", tone: "mint" as const, Icon: HelpCircle, labelKey: "core:resources.myths" },
+            ].map((r) => {
               const tone = r.tone as keyof typeof toneBg;
               const Icon = r.Icon;
               return (
@@ -144,7 +152,7 @@ const Module = () => {
                       <Icon className={`h-4 w-4 ${toneFg[tone]}`} strokeWidth={2} />
                     </div>
                     <span className={`text-sm font-medium underline decoration-2 underline-offset-4 ${toneFg[tone]}`}>
-                      {t(`core:resources.${r.key.toLowerCase()}`)}
+                      {t(r.labelKey)}
                     </span>
                   </div>
                   <div className={`grid h-7 w-7 place-items-center rounded-full ${toneBg[tone]}`}>
