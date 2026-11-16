@@ -32,6 +32,44 @@ const LanguageManager = () => {
   return null
 }
 
+const NavigationSync = () => {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  // 1. Support deep-linking via ?route=... or ?path=...
+  useEffect(() => {
+    if (!searchParams) return
+    const targetRoute = searchParams.get("route") || searchParams.get("path")
+    if (targetRoute && targetRoute !== pathname && targetRoute.startsWith("/")) {
+      router.replace(targetRoute)
+    }
+  }, [searchParams, pathname, router])
+
+  // 2. Post route change events to parent window (iframe) and mobile WebView
+  useEffect(() => {
+    if (typeof window === "undefined" || !pathname) return
+
+    const messagePayload = {
+      action: "routeChange",
+      pathname,
+      fullPath: `/women_wellness_selfcare${pathname}`,
+      url: window.location.href,
+    }
+
+    // React Native WebView
+    if ((window as any).ReactNativeWebView) {
+      (window as any).ReactNativeWebView.postMessage(JSON.stringify(messagePayload))
+    }
+    // Parent iframe (client-web)
+    else if (window.parent && window.parent !== window) {
+      window.parent.postMessage(messagePayload, "*")
+    }
+  }, [pathname])
+
+  return null
+}
+
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
 
@@ -43,6 +81,7 @@ export default function ClientProviders({ children }: { children: React.ReactNod
           <Sonner />
           <Suspense fallback={null}>
             <LanguageManager />
+            <NavigationSync />
           </Suspense>
           {children}
         </TooltipProvider>
